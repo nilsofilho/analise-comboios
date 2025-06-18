@@ -4,25 +4,44 @@ rm(list = ls());gc()
 
 source("R/fun/setup.R")
 
+#Faltando ajustar o código para tratar casos especiais de linhas circulares
+linhas_circular <- c(11, 
+                     12, 
+                     31, 
+                     34, 
+                     51, 
+                     52, 
+                     53, 
+                     56,
+                     63)
+#Faltando ajustar o código para tratar casos especiais de linhas one-way
+linhas_one_way <- c(552,
+                    560,
+                    1008)
+#Códigos com uso desconhecido
+desconhecidas <- c(0)
 
-linhas_circular <- c(11,12,51,52,53)
-desconhecidas <- c(0,2,5,8,13)
-
-nao_linhas <- c(599)
+#Códigos não utilizados para linhas
 nao_linhas <- data.frame(
-  cod_integracao_externo = c(0,    1,    2,    5,    8,   11,   12,   13,
-               22,   31,   32,   34,   35,   51,   52,   55,
-               56,   59,   62,   63,   73,  289,  344,  354,
-               445,  454,  457,  458,  460,  552,  560,  571,
-               574,  575,  578,  593,  594,  595,  598,  599,
-               605,  606,  637,  668, 1008, 1072, 1094, 1096),
-               tipo = c("Não definido", "Garagem", "Garagem", "Garagem", "Garagem", "Circular", "Circular", "Garagem",
-                        ""))
-faltando_gtfs <- c(22)
+  cod_integracao_externo = c(    1,    2,    5,    8,    13,
+               59,   62,   289,  354,
+               445,  
+               593,  594,  595,  598,  599,
+               637,  668, 1072),
+               tipo = c("Garagem", "Garagem", "Garagem", "Garagem", "Garagem",
+                        "Desativada", "Desativada", "Desativada", "Garagem",
+                        "Garagem",
+                        "Garagem", "Garagem", "Garagem", "Garagem", "Garagem",
+                        "Garagem", "Garagem", "Garagem"))
+#Linhas ausentes no GTFS
+faltando_gtfs <- c(22, 344, 605, 606, 1094, 1096, #Linhas regulares
+                   454, 457, 458, 460, #Linhas sazonais Halleluya
+                   571, 574, 575, 576, 578 #Linhas sazonais Aterro Iracema
+                   )
 
-a_fazer
+# a_fazer
 
-linha <- 22
+linha <-552
 
 tabela_linhas <- read_xlsx("data-raw/route_code_gps.xlsx")
 
@@ -111,6 +130,9 @@ if (nrow(stops_ida_info %>% filter(stop_sequence == 1))>1 |
     nrow(stops_volta_info %>% filter(stop_sequence == 1))>1 |
     nrow(stops_ida_info)<=0 |
     nrow(stops_volta_info)<=0 ){
+  
+  #add code for handling one direction routes , no circular.
+  #Insert code for handling circular routes
   
   return(paste0("Linha ", linha, " não processada - linha Circular \n ou ausente itinerario de ida/volta"))
   break
@@ -380,7 +402,7 @@ gps_final_dt[, viagem_id_final := paste(
 # 
 # unique(teste_plot$viagem_id_final)
 # 
-# teste_plot %>% filter(vehicle_id == 43703) %>% distinct(viagem_id_final)
+# teste_plot %>% filter(vehicle_id == 42734) %>% distinct(viagem_id_final)
 # # trip_view <- teste_plot %>% filter(viagem_id_final == "75_58007_20250301_V_1")
 # #
 # # trip_view2 <- teste_plot %>% filter(viagem_id_final == "75_58007_20250301_I_4")
@@ -391,8 +413,8 @@ gps_final_dt[, viagem_id_final := paste(
 # volta <- gtfstools::convert_shapes_to_sf(gtfs_linha) %>%
 #   filter(shape_id == paste0("shape",str_pad(linha_certa, width = 4, side = "left", pad = "0"),"-","V"))
 # 
-# trip_view <- teste_plot %>% filter(viagem_id_final == "507_43295_20250301_I_3")
-# trip_view2 <- teste_plot %>% filter(viagem_id_final == "507_43295_20250301_V_4")
+# trip_view <- teste_plot %>% filter(viagem_id_final == "73_42734_20250301_I_1")
+# trip_view2 <- teste_plot %>% filter(viagem_id_final == "73_42734_20250301_V_2")
 # 
 # mapview(ida)+ mapview(trip_view, zcol = "vseq") + mapview(stops_ida_sf, color = "darkred") +
 # 
