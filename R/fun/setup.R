@@ -18,6 +18,7 @@ library(purrr)
 library(furrr)
 library(future)
 
+#not in function
 `%nin%` <- Negate(`%in%`)
 
 create_set_ids <- function(sequence, gap_threshold = 2) {
