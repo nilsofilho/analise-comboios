@@ -18,6 +18,15 @@ gps <- read_parquet(sprintf("data-raw/gps_linha_tratado/%s/gps_%s.parquet", mes,
 
 gps[, timestamp := lubridate::with_tz(timestamp, tzone = "America/Fortaleza")]
 
+gtfs <- read_gtfs("data-raw/GTFS_start_202503.zip")
+
+gtfs_linha <- gtfs %>% filter_by_route_id(str_pad(linha, width = 4, side = "left", pad = "0"))
+
+
+
+
+
+
 
 
 
