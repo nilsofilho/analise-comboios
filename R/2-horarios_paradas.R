@@ -391,6 +391,6 @@ arrow::write_parquet(trips_para_salvar,
 
 }
 
-walk(.x = , .f = processa_viagens(mes = 3))
+walk(.x = numeros_linhas, .f = processa_viagens(mes = 3))
 
 
