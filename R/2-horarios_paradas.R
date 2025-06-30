@@ -1,7 +1,7 @@
 #2 - Detectar horário de passagem nas paradas
 rm(list = ls()); gc()
 source("R/fun/setup.R")
-
+options(future.globals.maxSize = 3000 * 1024^2)
 linha <- 75
 mes <- 3
 
@@ -11,7 +11,7 @@ numeros_linhas <- sort(as.numeric(str_extract(basename(lista_linhas), "\\d+")))
 
 tabela_linhas <- read_xlsx("data-raw/route_code_gps.xlsx")
 
-processa_viagens <- function(mes, linha) {
+processa_viagens <- function(linha, mes = 3) {
   
 
 
@@ -391,6 +391,6 @@ arrow::write_parquet(trips_para_salvar,
 
 }
 
-walk(.x = numeros_linhas, .f = processa_viagens(mes = 3))
+walk(.x = numeros_linhas[17:length(numeros_linhas)], .f = processa_viagens)
 
 
